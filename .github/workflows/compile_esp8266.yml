@@ -52,6 +52,7 @@ jobs:
       run: python getVersion.py
     - name: create-release
       id: create-release
+      uses: actions/create-release@v1
       with:
         draft: false
         prerelease: false
