@@ -1,4 +1,4 @@
-name: ESP8266
+name: Ahoy Release for ESP8266
 
 on:
   push:
@@ -62,7 +62,7 @@ jobs:
       env:
           VERSION: ${{ steps.rename-binary-files.outputs.name }}
     - name: create-artifact
-      run: zip  --junk-paths ahoy-${{ steps.rename-binary-files.outputs.name }}.zip tools/esp8266/.pio/build/out/* tools/esp8266/User_Manual.md
+      run: zip  --junk-paths ${{ steps.rename-binary-files.outputs.name }}.zip tools/esp8266/.pio/build/out/* tools/esp8266/User_Manual.md
     - name: upload-release
       id: upload-release
       uses: actions/upload-release-asset@v1
@@ -70,6 +70,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create-release.outputs.upload_url }}
-        asset_path: ./ahoy-${{ steps.rename-binary-files.outputs.name }}.zip
-        asset_name: ahoy-${{ steps.rename-binary-files.outputs.name }}.zip
+        asset_path: ./${{ steps.rename-binary-files.outputs.name }}.zip
+        asset_name: ${{ steps.rename-binary-files.outputs.name }}.zip
         asset_content_type: application/zip
