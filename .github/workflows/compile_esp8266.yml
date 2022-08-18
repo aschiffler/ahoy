@@ -11,6 +11,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+      with:
+        ref: main
     - uses: benjlevesque/short-sha@v1.2
       id: short-sha
       with:
@@ -21,8 +23,6 @@ jobs:
     - run: echo $SHA
       env: 
         SHA: ${{ env.SHA }}
-      with:
-        ref: main
     - name: Cache pip
       uses: actions/cache@v3
       with:
