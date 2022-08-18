@@ -11,6 +11,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: benjlevesque/short-sha@v1.2
+      id: short-sha
+      with:
+        length: 6
+    - run: echo $SHA
+      env: 
+        SHA: ${{ steps.short-sha.outputs.sha }}
+    - run: echo $SHA
+      env: 
+        SHA: ${{ env.SHA }}
       with:
         ref: main
     - name: Cache pip
@@ -35,7 +45,7 @@ jobs:
       working-directory: tools/esp8266/html
       run: python convert.py
     - name: Run PlatformIO
-      run: pio run -d tools/esp8266
+      run: pio run -d tools/esp8266 --environment esp8266-release
     - name: Rename firmware binaries
       working-directory: tools/esp8266/scripts
       run: python getVersion.py
