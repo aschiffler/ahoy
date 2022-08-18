@@ -58,12 +58,14 @@ jobs:
         prerelease: false
         release_name: ${{ steps.rename-binary-files.outputs.name }}
         tag_name: ${{ github.ref }}
-        body_path: tools/esp8266/User_Manual.md
+        body_path: tools/esp8266/README.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
+    - name: install-zip
+      uses: montudor/action-zip@v1
     - name: create-artifact
       run: |
-          zip --junk-paths ahoy-${{ steps.rename-binary-files.outputs.name }} tools/esp8266/.pio/build/out/*.bin
+          zip --junk-paths ahoy-${{ steps.rename-binary-files.outputs.name }}.zip tools/esp8266/.pio/build/out/*.bin tools/esp8266/User_Manual.md
     - name: upload-release
       id: upload-release
       uses: actions/upload-release-asset@v1
