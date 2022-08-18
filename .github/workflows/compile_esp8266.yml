@@ -23,29 +23,32 @@ jobs:
     - run: echo $SHA
       env: 
         SHA: ${{ env.SHA }}
-    - name: Cache pip
+    - name: cache-pip
       uses: actions/cache@v3
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
         restore-keys: |
           ${{ runner.os }}-pip-
-    - name: Cache PlatformIO
+    - name: cache-platformio
       uses: actions/cache@v3
       with:
         path: ~/.platformio
         key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
-    - name: Set up Python
+    - name: setup-python
       uses: actions/setup-python@v3
-    - name: Install PlatformIO
+    - name: install-platformio
       run: |
         python -m pip install --upgrade pip
         pip install --upgrade platformio
-    - name: Update html
+    - name: update-html
       working-directory: tools/esp8266/html
       run: python convert.py
     - name: Run PlatformIO
       run: pio run -d tools/esp8266 --environment esp8266-release
-    - name: Rename firmware binaries
+    - name: rename-binary-files
+      id: rename-binary-files
       working-directory: tools/esp8266/scripts
       run: python getVersion.py
+    - name: create-release
+      run: echo ${{ steps.rename-binary-files.outputs.name }}
