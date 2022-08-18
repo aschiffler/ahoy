@@ -61,8 +61,6 @@ jobs:
         body_path: tools/esp8266/README.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
-    - name: install-zip
-      uses: montudor/action-zip@v1
     - name: create-artifact
       uses: thedoctor0/zip-release@main
       with:
