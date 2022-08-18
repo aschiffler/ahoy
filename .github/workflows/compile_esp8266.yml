@@ -46,10 +46,6 @@ jobs:
       run: python convert.py
     - name: Run PlatformIO
       run: pio run -d tools/esp8266 --environment esp8266-release
-  rename_binaries:
-    runs-on: self-hosted
-    needs: build
-    steps:
     - name: Rename firmware binaries
       working-directory: tools/esp8266/scripts
       run: python getVersion.py
