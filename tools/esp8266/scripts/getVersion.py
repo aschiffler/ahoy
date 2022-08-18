@@ -17,10 +17,11 @@ def readVersion(path, infile):
                     version += line[p+13:].rstrip() + "."
     
     os.mkdir(path + ".pio/build/out/")
-    
-    versionout = version[:-1] + "_esp8266_release.bin"
+    sha = os.getenv(SHA,default='sha')
+    versionout = version[:-1] + "_esp8266_" + sha + ".bin"
     src = path + ".pio/build/esp8266-release/firmware.bin"
     dst = path + ".pio/build/out/" + versionout
     os.rename(src, dst)
+    
     
 readVersion("../", "defines.h")
