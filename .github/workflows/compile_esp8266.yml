@@ -58,6 +58,19 @@ jobs:
         prerelease: false
         release_name: ${{ steps.rename-binary-files.outputs.name }}
         tag_name: ${{ github.ref }}
-        #body_path: CHANGELOG.md
+        body_path: tools/esp8266/User_Manual.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
+    - name: create-artifact
+      run: |
+          zip --junk-paths ahoy-${{ steps.rename-binary-files.outputs.name }} tools/esp8266/.pio/build/out/*.bin
+    - name: upload-release
+      id: upload-release
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        asset_path: ./ahoy-${{ steps.rename-binary-files.outputs.name }}.zip
+        asset_name: ahoy-${{ steps.rename-binary-files.outputs.name }}.zip
+        asset_content_type: application/zip
