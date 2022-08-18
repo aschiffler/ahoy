@@ -16,13 +16,7 @@ jobs:
     - uses: benjlevesque/short-sha@v1.2
       id: short-sha
       with:
-        length: 6
-    - run: echo $SHA
-      env: 
-        SHA: ${{ steps.short-sha.outputs.sha }}
-    - run: echo $SHA
-      env: 
-        SHA: ${{ env.SHA }}
+        length: 7
     - name: cache-pip
       uses: actions/cache@v3
       with:
@@ -58,15 +52,17 @@ jobs:
         prerelease: false
         release_name: ${{ steps.rename-binary-files.outputs.name }}
         tag_name: ${{ github.ref }}
-        body_path: tools/esp8266/README.md
+        body_path: tools/esp8266/CHANGES.md
       env:
         GITHUB_TOKEN: ${{ github.token }}
-    - name: create-artifact
-      uses: thedoctor0/zip-release@main
+    - name: set-version
+      uses: cschleiden/replace-tokens@v1
       with:
-        type: zip
-        filename: ahoy-${{ steps.rename-binary-files.outputs.name }}.zip
-        path: tools/esp8266/.pio/build/out/
+        files: tools/esp8266/User_Manual.md
+      env:
+          VERSION: ${{ steps.rename-binary-files.outputs.name }}
+    - name: create-artifact
+      run: zip  --junk-paths ahoy-${{ steps.rename-binary-files.outputs.name }}.zip tools/esp8266/.pio/build/out/* tools/esp8266/User_Manual.md
     - name: upload-release
       id: upload-release
       uses: actions/upload-release-asset@v1
