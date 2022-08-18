@@ -51,4 +51,12 @@ jobs:
       working-directory: tools/esp8266/scripts
       run: python getVersion.py
     - name: create-release
-      run: echo ${{ steps.rename-binary-files.outputs.name }}
+      id: create-release
+      with:
+        draft: false
+        prerelease: false
+        release_name: ${{ steps.rename-binary-files.outputs.name }}
+        tag_name: ${{ github.ref }}
+        #body_path: CHANGELOG.md
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
