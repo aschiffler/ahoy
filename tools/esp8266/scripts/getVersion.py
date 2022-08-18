@@ -24,7 +24,7 @@ def readVersion(path, infile):
     src = path + ".pio/build/esp8266-release/firmware.bin"
     dst = path + ".pio/build/out/" + versionout
     os.rename(src, dst)
-    print("::set-output name=name::" + versionnumber )
+    print("::set-output name=name::" + versionnumber[:-1] )
     
     
 readVersion("../", "defines.h")
